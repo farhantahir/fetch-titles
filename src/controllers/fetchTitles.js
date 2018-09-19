@@ -2,6 +2,7 @@ const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
 const requestPromise = require('request-promise-native');
+const RxJs = require('rxjs');
 
 const utils = require('../utilities');
 
@@ -82,6 +83,18 @@ module.exports = {
         res.render('list_titles', { siteTitles });
       })
       .catch(err => utils.respondError(res, `An error occured: ${err.toString()}`));
-  }
+  },
 
+  /**
+   * Fetch titles request handler using RXJS
+   */
+  fetchTitlesWithRXJS: function (req, res) {
+    const addresses = req.query.address || [];        
+    const addressRequests = requestTitlesWithPromises(addresses);
+    const observeableSource = RxJs.forkJoin(...addressRequests);
+    observeableSource.subscribe(
+      siteTitles => res.render('list_titles', { siteTitles }),
+      err => utils.respondError(res, `An error occured: ${err.toString()}`)
+    );
+  }
 };

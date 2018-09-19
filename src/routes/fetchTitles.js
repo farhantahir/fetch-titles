@@ -13,6 +13,7 @@ module.exports = () => {
  router.get('/callbacks/I/want/title', isAddressExists, FetchTitles.fetchTitlesWithCallbacks);
  router.get('/async-lib/I/want/title', isAddressExists, FetchTitles.fetchTitlesWithAsyncLib);
  router.get('/promises/I/want/title', isAddressExists, FetchTitles.fetchTitlesWithPromises);
+ router.get('/rxjs/I/want/title', isAddressExists, FetchTitles.fetchTitlesWithRXJS);
  
  return {
    PATH,

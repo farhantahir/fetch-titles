@@ -17,9 +17,9 @@ Fetch Titles is an example application to show case the different approaches tha
 The approaches for control flow used are as follow:
 
 * Callbacks
-* Control flow library async.js
+* Control flow library `async.js`
 * Native Promises (Could have used bluebird, RSVP or Q but wanted to use native promises)
-* Reactive Programming using RxJS
+* Reactive Programming using `RxJS`
 
 # Technologies
 

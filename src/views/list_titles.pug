@@ -1,0 +1,7 @@
+extends layout.pug
+
+block content
+  h2 Titles of the requested site addresses
+  ul
+    each title in siteTitles
+      li=`${title.address} - ${title.title}`

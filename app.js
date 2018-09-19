@@ -3,6 +3,7 @@
  */
 
 const express = require('express');
+const utils = require('./src/utilities');
 const app = express();
 
 /**
@@ -40,14 +41,14 @@ require('./src')(app);
  * Global middleware to catch 404 errors.
  */
 app.use(function (req, res, next) {
-  res.status(404).send('Page not found');
+  utils.respondError(res, 'Page not found!', 404);
 });
 
 /**
  * Global middleware to handle errors.
  */
 app.use(function (err, req, res, next) {
-  res.status(500).send(`An error occured. ${err.toString()}`);
+  utils.respondError(res, `An error occured. ${err.toString()}`);
 });
 
 module.exports = app;

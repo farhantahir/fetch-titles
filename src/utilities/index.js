@@ -2,7 +2,8 @@ const utilities = {};
 
 [
   'isURL',
-  'prepareURL'
+  'prepareURL',
+  'respondError'
 ].forEach(m => {
   utilities[m] = require(`./${m}`);
 });

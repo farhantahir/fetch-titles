@@ -42,8 +42,7 @@ module.exports = {
   fetchTitlesWithCallbacks: function (req, res) {
     
     const addresses = req.query.address || [];
-    const siteTitles = [];
-    if (!addresses.length) res.send('No address found!');
+    const siteTitles = [];    
     
     let processedAddrs = 0;
 
@@ -68,24 +67,21 @@ module.exports = {
    * Fetch Titles request handler using async library
    */
   fetchTitlesWithAsyncLib: function (req, res) {
-    const addresses = req.query.address || [];    
-    if (!addresses.length) res.send('No address found!');
+    const addresses = req.query.address || [];        
     async.map(addresses, asyncLibIteratee, function(err, siteTitles) {
       res.render('list_titles', { siteTitles });
     });
   },
 
   fetchTitlesWithPromises: function (req, res) {
-    const addresses = req.query.address || [];    
-    if (!addresses.length) res.send('No address found!');
-
+    const addresses = req.query.address || [];        
     const addressRequests = requestTitlesWithPromises(addresses);
 
     Promise.all(addressRequests)
       .then(siteTitles => {
         res.render('list_titles', { siteTitles });
       })
-      .catch(err => res.send(`An error occured: ${err.toString()}`));
+      .catch(err => utils.respondError(res, `An error occured: ${err.toString()}`));
   }
 
 };

@@ -10,7 +10,8 @@ const FetchTitles = require('../controllers/fetchTitles');
 module.exports = () => {
  const PATH = '';
  router.get('/callbacks/I/want/title', FetchTitles.fetchTitlesWithCallbacks);
-
+ router.get('/async-lib/I/want/title', FetchTitles.fetchTitlesWithAsyncLib);
+ 
  return {
    PATH,
    router

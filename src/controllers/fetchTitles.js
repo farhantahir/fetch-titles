@@ -1,8 +1,22 @@
 const request = require('request');
 const cheerio = require('cheerio');
+const async = require('async');
 
 const utils = require('../utilities');
 
+const asyncLibIteratee = function (addr, cb) {
+  const url = utils.prepareURL(addr);
+  request(url, function (err, resp, body) {
+    let titleObj = {};
+    if (err) {          
+      titleObj = { address: addr, title: null };
+    } else {
+      const $ = cheerio.load(body);          
+      titleObj = { address: addr, title: $('title').text() || null };
+    }
+    cb(null, titleObj);
+  });
+}
 
 module.exports = {
 
@@ -32,6 +46,16 @@ module.exports = {
           res.render('list_titles', { siteTitles });
       });
     }    
-  }
+  },
 
+  /**
+   * Fetch Titles request handler using async library
+   */
+  fetchTitlesWithAsyncLib: function (req, res) {
+    const addresses = req.query.address || [];    
+    if (!addresses.length) res.send('No address found!');
+    async.map(addresses, asyncLibIteratee, function(err, siteTitles) {
+      res.render('list_titles', { siteTitles });
+    });
+  }
 };

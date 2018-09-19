@@ -4,4 +4,4 @@ block content
   h2 Following are the titles of given websites:
   ul
     each title in siteTitles
-      li=`${title.address} - ${title.title}`
+      li=`${title.address} - ${title.title || 'NO RESPONSE'}`

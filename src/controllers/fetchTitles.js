@@ -1,6 +1,7 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
+const requestPromise = require('request-promise-native');
 
 const utils = require('../utilities');
 
@@ -16,7 +17,22 @@ const asyncLibIteratee = function (addr, cb) {
     }
     cb(null, titleObj);
   });
-}
+};
+
+const requestTitlesWithPromises = function (addresses) {
+  return addresses.map(addr => {
+    const url = utils.prepareURL(addr);
+    return requestPromise(url)
+      .then(body => {
+        const $ = cheerio.load(body);
+        return { address: addr, title: $('title').text() || null };
+      })
+      .catch(err => {
+        console.log(err, 'err');
+        Promise.resolve({ address: addr, title: null });
+      });
+  });
+};
 
 module.exports = {
 
@@ -57,5 +73,19 @@ module.exports = {
     async.map(addresses, asyncLibIteratee, function(err, siteTitles) {
       res.render('list_titles', { siteTitles });
     });
+  },
+
+  fetchTitlesWithPromises: function (req, res) {
+    const addresses = req.query.address || [];    
+    if (!addresses.length) res.send('No address found!');
+
+    const addressRequests = requestTitlesWithPromises(addresses);
+
+    Promise.all(addressRequests)
+      .then(siteTitles => {
+        res.render('list_titles', { siteTitles });
+      })
+      .catch(err => res.send(`An error occured: ${err.toString()}`));
   }
+
 };

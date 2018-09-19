@@ -11,6 +11,7 @@ module.exports = () => {
  const PATH = '';
  router.get('/callbacks/I/want/title', FetchTitles.fetchTitlesWithCallbacks);
  router.get('/async-lib/I/want/title', FetchTitles.fetchTitlesWithAsyncLib);
+ router.get('/promises/I/want/title', FetchTitles.fetchTitlesWithPromises);
  
  return {
    PATH,
